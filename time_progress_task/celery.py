@@ -18,8 +18,4 @@ app.autodiscover_tasks()
 app.conf.broker_url = BASE_REDIS_URL
 
 
-@app.task(bind=True)
-def debug_task(self):
-    print(f'Request: {self.request!r}')
-
 
