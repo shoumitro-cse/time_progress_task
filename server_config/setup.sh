@@ -1,3 +1,4 @@
+cp env.example .env
 if [ ! -d "./static" ] 
 then
     python manage.py collectstatic
