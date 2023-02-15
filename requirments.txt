@@ -2,4 +2,5 @@ Django
 celery
 django-decouple
 redis
+channels-redis
 channels==3.0.5

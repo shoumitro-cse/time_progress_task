@@ -14,7 +14,7 @@ cd time_progress_task
 cp env.example .env
 python -m venv venv
 source ./venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirments.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic
