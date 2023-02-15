@@ -2,6 +2,7 @@ from celery import shared_task
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import time
+from time_progress_task import redis_conn
 
 
 @shared_task
@@ -14,4 +15,5 @@ def progress_scheduled_create(group_name, json_data):
             'progress_id': json_data["progress_id"],
         })
         time.sleep(1)
+    redis_conn.remove_progress_id(json_data["progress_id"])
     return None

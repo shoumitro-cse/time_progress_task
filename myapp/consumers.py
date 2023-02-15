@@ -2,6 +2,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from time_progress_task import celery_app
 import json
+from time_progress_task import redis_conn
 
 
 class ProgressConsumer(JsonWebsocketConsumer):
@@ -16,8 +17,12 @@ class ProgressConsumer(JsonWebsocketConsumer):
 
     def receive(self, text_data):
         json_data = json.loads(text_data)
-        celery_app.send_task('myapp.tasks.progress_scheduled_create', args=[self.group_name, json_data],
-                             kwargs={}, queue=json_data["progress_id"] + '_queue')
+        if not redis_conn.get_progress_id(json_data["progress_id"]):
+            celery_app.send_task('myapp.tasks.progress_scheduled_create',
+                                 args=[self.group_name, json_data],
+                                 kwargs={},
+                                 queue=json_data["progress_id"] + '_queue')
+            redis_conn.set_progress_id(json_data["progress_id"])
 
     def send_message(self, event):
         del event['type']
