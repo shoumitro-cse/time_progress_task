@@ -21,6 +21,10 @@ python manage.py collectstatic
 rm -rf static
 mv staticfiles static
 python manage.py runserver
+
+# Another terminal
+celery -A time_progress_task worker -l info -c 4 \
+ -Q progress_one_queue,progress_two_queue,progress_three_queue --autoscale 1,10
 ```
 
 ## Celery for shared task
@@ -28,11 +32,14 @@ python manage.py runserver
 docker run --name redis_container -p 6379:6379 -d redis
 celery -A time_progress_task worker --help
 
+
 # same worker and multiple queue, here c=4, will have four child process of a each queue
 celery -A time_progress_task worker -l info -c 4 -n my_worker -Q queue1,queue2,queue3
 
-# worker auto scale 3 to 10
-celery -A time_progress_task worker -l info -c 4 -Q queue1,queue2,queue3 --autoscale 3,10
+
+# worker auto scale 1 to 10
+celery -A time_progress_task worker -l info -c 4 -Q queue1,queue2,queue3 --autoscale 1,10
+
 
 # multiple worker and multiple queue
 celery -A time_progress_task worker -l info  -c 1 -n my_worker1 -Q queue1
