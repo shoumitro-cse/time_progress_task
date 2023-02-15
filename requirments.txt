@@ -3,4 +3,5 @@ celery
 django-decouple
 redis
 channels-redis
+gunicorn
 channels==3.0.5

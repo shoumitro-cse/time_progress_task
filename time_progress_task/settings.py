@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-&96^_heeoit$c7ha=_joy887e7%y(e9m_$inq6b=(^l#e@6z%k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -81,7 +81,7 @@ CHANNEL_LAYERS = {
    "default": {
        "BACKEND": "channels_redis.core.RedisChannelLayer",
        "CONFIG": {
-           "hosts": [("0.0.0.0", 6379)],
+           "hosts": [(config('HOST'), 6379)],
        },
    },
 }
@@ -149,3 +149,7 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REDIS_HOST = config('HOST')
+REDIS_URL = f'redis://{REDIS_HOST}:6379'
+

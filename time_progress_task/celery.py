@@ -1,10 +1,9 @@
 import os
 from celery import Celery
+from django.conf import settings
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'time_progress_task.settings')
-
-BASE_REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 app = Celery('time_progress_task')
 
 # Using a string here means the worker doesn't have to serialize
@@ -15,7 +14,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
-app.conf.broker_url = BASE_REDIS_URL
+app.conf.broker_url = settings.REDIS_URL
 
 
 

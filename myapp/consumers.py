@@ -17,6 +17,7 @@ class ProgressConsumer(JsonWebsocketConsumer):
 
     def receive(self, text_data):
         json_data = json.loads(text_data)
+        #redis_conn.remove_progress_id(json_data["progress_id"])
         if not redis_conn.get_progress_id(json_data["progress_id"]):
             celery_app.send_task('myapp.tasks.progress_scheduled_create',
                                  args=[self.group_name, json_data],
