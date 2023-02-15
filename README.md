@@ -12,7 +12,7 @@ Note : Here, we have used Django Channel, Celery, RabbitMQ/Redis and Docker.
 git clone https://github.com/shoumitro-cse/time_progress_task.git
 cd time_progress_task
 cp env.example .env
-sudo sed -i -e 's/host.docker.internal/0.0.0.0/g' .env
+sed -i -e 's/host.docker.internal/0.0.0.0/g' .env
 python -m venv venv
 source ./venv/bin/activate
 pip install -r requirments.txt
@@ -24,16 +24,18 @@ mv staticfiles static
 python manage.py runserver
 
 # Another terminal
+docker run --restart always --name redis_container -p 6379:6379 -d redis
 celery -A time_progress_task worker -l info -c 4 \
  -Q progress_one_queue,progress_two_queue,progress_three_queue --autoscale 1,10
 ```
 
 ### Docker Installation
 ```
+docker run --restart always --name redis_container -p 6379:6379 -d redis
 docker-compose up --build -d
 ```
 
-### Celery for shared task
+### Celery worker & queue
 
 ```
 sudo docker run --restart always --name redis_container -p 6379:6379 -d redis
